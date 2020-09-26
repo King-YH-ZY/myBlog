@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.yh.mapper.YhBlogTagMapper">
+    
+    <resultMap type="YhBlogTag" id="YhBlogTagResult">
+        <result property="tagId"    column="tag_id"    />
+        <result property="name"    column="tag_name"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createById"    column="create_by_id"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectYhBlogTagVo">
+        select tag_id, tag_name, create_by,  create_time, create_by_id from yh_blog_tag
+    </sql>
+
+    <select id="selectYhBlogTagList" parameterType="YhBlogTag" resultMap="YhBlogTagResult">
+        <include refid="selectYhBlogTagVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and tag_name like concat('%', #{name}, '%')</if>
+        </where>
+    </select>
+
+    <select id="checkTagUnique" parameterType="YhBlogTag" resultType="int">
+        select count(1) from yh_blog_tag where tag_name = #{name} limit 1
+    </select>
+
+    <select id="checkTagUniqueById" parameterType="YhBlogTag" resultType="int">
+        select count(1) from yh_blog_tag where tag_name = #{name} and tag_id != #{tagId} limit 1
+    </select>
+
+    <select id="selectAllTagName" resultType="java.lang.String">
+        select tag_name from yh_blog_tag
+    </select>
+
+        
+    <insert id="insertYhBlogTag" parameterType="YhBlogTag" useGeneratedKeys="true" keyProperty="tagId">
+        insert into yh_blog_tag
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">tag_name,</if>
+            <if test="createBy != null and name != ''">create_by,</if>
+            <if test="createById != null and name != ''">create_by_id,</if>
+            create_time
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createById != null">#{createById},</if>
+            sysdate()
+         </trim>
+
+    </insert>
+
+    <update id="updateYhBlogTag" parameterType="YhBlogTag">
+        update yh_blog_tag
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">tag_name = #{name}</if>
+        </trim>
+        where tag_id = #{tagId}
+    </update>
+
+    <delete id="deleteYhBlogTagById" parameterType="Long">
+        delete from yh_blog_tag where tag_id = #{tagId}
+    </delete>
+
+    <delete id="deleteYhBlogTagByIds" parameterType="String">
+        delete from yh_blog_tag where tag_id in
+        <foreach item="tagId" collection="array" open="(" separator="," close=")">
+            #{tagId}
+        </foreach>
+    </delete>
+    
+</mapper>

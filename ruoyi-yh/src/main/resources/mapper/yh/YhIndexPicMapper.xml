@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.yh.mapper.YhIndexPicMapper">
+    
+    <resultMap type="YhIndexPic" id="YhIndexPicResult">
+        <result property="id"    column="id"    />
+        <result property="fileUrl"    column="file_url"    />
+        <result property="fileName"    column="file_name"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectIndexPicVo">
+        select id, file_url, file_name, status, create_time from yh_index_pic
+    </sql>
+
+    <select id="selectIndexPicList" parameterType="YhIndexPic" resultMap="YhIndexPicResult">
+        <include refid="selectIndexPicVo"/>
+        <where>
+            <if test="fileName != null  and fileName != ''"> and file_name like concat('%', #{fileName}, '%')</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+        order by create_time desc
+    </select>
+    <update id="updateIndexPicStatus" parameterType="java.util.Map">
+        update yh_index_pic
+        set status = #{status}
+        where id = #{id}
+    </update>
+
+    
+</mapper>

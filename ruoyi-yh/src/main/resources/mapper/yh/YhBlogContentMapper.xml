@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.yh.mapper.YhBlogContentMapper">
+    
+    <resultMap type="YhBlogContent" id="YhBlogContentResult">
+        <result property="contentId"    column="content_id"    />
+        <result property="yhBlogId"    column="yh_blog_id"    />
+        <result property="content"    column="content"    />
+        <result property="contentHtml"    column="content_html"    />
+    </resultMap>
+
+    <sql id="selectYhBlogContentVo">
+        select content_id, yh_blog_id, content, content_html from yh_blog_content
+    </sql>
+    
+    <select id="selectYhBlogContentById" parameterType="Long" resultMap="YhBlogContentResult">
+        <include refid="selectYhBlogContentVo"/>
+        where content_id = #{contentId}
+    </select>
+
+    <select id="selectYhBlogContentByBlogId" parameterType="Long" resultMap="YhBlogContentResult">
+        <include refid="selectYhBlogContentVo"/>
+        where yh_blog_id = #{yhBlogId}
+    </select>
+        
+    <insert id="insertYhBlogContent" parameterType="YhBlogContent" useGeneratedKeys="true" keyProperty="contentId">
+        insert into yh_blog_content
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="yhBlogId != null and yhBlogId !=0">yh_blog_id,</if>
+            <if test="content != null and content != ''">content,</if>
+            <if test="contentHtml != null and contentHtml != ''">content_html</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="yhBlogId != null and yhBlogId != ''">#{yhBlogId},</if>
+            <if test="content != null">#{content},</if>
+            <if test="contentHtml != null">#{contentHtml}</if>
+         </trim>
+    </insert>
+
+    <update id="updateYhBlogContent" parameterType="YhBlogContent">
+        update yh_blog_content
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="content != null">content = #{content},</if>
+            <if test="contentHtml != null">content_html = #{contentHtml}</if>
+        </trim>
+        where yh_blog_id = #{yhBlogId}
+    </update>
+
+    <delete id="deleteYhBlogContent" parameterType="Long">
+        delete from yh_blog_content where content_Id = #{contentId}
+    </delete>
+
+    <delete id="deleteYhBlogContentByBlogId" parameterType="String">
+        delete from yh_blog_content where yh_Blog_Id = #{blogId}
+    </delete>
+
+    <delete id="deleteYhBlogContentByBlogIds" parameterType="String">
+        delete from yh_blog_content where yh_Blog_Id in
+        <foreach item="blogId" collection="array" open="(" separator="," close=")">
+            #{blogId}
+        </foreach>
+    </delete>
+    
+</mapper>

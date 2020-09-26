@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.yh.mapper.YhBlogMapper">
+    
+    <resultMap type="YhBlog" id="YhBlogResult">
+        <result property="blogId"    column="blog_id"    />
+        <result property="blogName"    column="blog_name"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createById"    column="create_by_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateById"    column="update_by_id"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="tag"    column="tag"    />
+        <result property="readNum"    column="read_num"    />
+        <result property="likeNum"    column="like_num"    />
+    </resultMap>
+
+    <resultMap id="YhBlogMap" type="java.util.HashMap">
+        <id property="blogId" column="blog_id" />
+        <result property="blogName"    column="blog_name"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="tag"    column="tag"    />
+        <result property="readNum"    column="read_num"    />
+        <result property="contentHtml" column="content_html"/>
+        <result property="content" column="content"/>
+    </resultMap>
+
+    <resultMap id="BlogTimeLine" type="java.util.HashMap">
+        <result property="blogNames"    column="blog_name"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectYhBlogVo">
+        select blog_id, blog_name, status, create_by, create_time, update_by, update_time,tag from yh_blog
+    </sql>
+
+    <select id="selectYhBlogList" parameterType="YhBlog" resultMap="YhBlogResult">
+        <include refid="selectYhBlogVo"/>
+        <where>  
+            <if test="blogName != null  and blogName != ''"> and blog_name like concat('%', #{blogName}, '%')</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="tag != null  and tag != ''"> and tag like concat('%', #{tag}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectBlogList" parameterType="java.util.HashMap" resultMap="YhBlogMap">
+        select CAST(b.blog_id AS CHAR) as blog_id, b.blog_name, DATE_FORMAT(b.create_time, '%Y-%c-%d %H:%i:%s' ) as create_time, DATE_FORMAT(b.update_time, '%Y-%c-%d %H:%i:%s' ) as update_time,b.tag,b.read_num,c.content_html,c.content from yh_blog b
+        left join yh_blog_content c on b.blog_id = c.yh_blog_id
+        <where>
+            <if test="blogName != null  and blogName != ''"> and (b.blog_name like concat('%', #{searchInfo}, '%') or b.tag like concat('%', #{searchInfo}, '%'))</if>
+            <if test="status != null  and status != ''"> and b.status = #{status}</if>
+            <if test="blogId != null  and blogId != ''"> and b.blog_id = #{blogId}</if>
+        </where>
+        order by b.create_time desc
+    </select>
+    <select id="selectBlogListTimeLine" resultMap="BlogTimeLine" >
+        SELECT DATE_FORMAT(b.create_time,'%Y-%m-%d') AS create_time,GROUP_CONCAT(CONCAT(b.blog_name,"--+--",b.blog_id)) AS blog_name FROM `yh_blog` b
+        WHERE b.status = 2
+        GROUP BY DATE_FORMAT(b.create_time,'%Y-%m-%d')
+        ORDER BY b.create_time DESC
+    </select>
+
+    <select id="selectYhBlogListByUser" parameterType="YhBlog" resultMap="YhBlogResult">
+        <include refid="selectYhBlogVo"/>
+        <where>
+            <if test="blogName != null  and blogName != ''"> and blog_name like concat('%', #{blogName}, '%')</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="createById != null  and createById != ''"> and create_by_id = #{createById}</if>
+            <if test="tag != null  and tag != ''"> and tag like concat('%', #{tag}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectYhBlogById" parameterType="Long" resultMap="YhBlogResult">
+        <include refid="selectYhBlogVo"/>
+        where blog_id = #{blogId}
+    </select>
+        
+    <insert id="insertYhBlog" parameterType="YhBlog" useGeneratedKeys="true" keyProperty="blogId">
+        insert into yh_blog
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="blogName != null and blogName != ''">blog_name,</if>
+            <if test="status != null and blogName != ''">status,</if>
+            <if test="tag != null and tag != ''">tag,</if>
+            <if test="createBy != null and blogName != ''">create_by,</if>
+            <if test="createById != null and blogName != ''">create_by_id,</if>
+            create_time,
+            <if test="updateBy != null and blogName != ''">update_by,</if>
+            <if test="updateById != null and blogName != ''">update_by_id,</if>
+            <if test="readNum != null and readNum != ''">read_num,</if>
+            <if test="likeNum != null and likeNum != ''">like_num,</if>
+            update_time
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="blogName != null and blogName != ''">#{blogName},</if>
+            <if test="status != null and blogName != ''">#{status},</if>
+            <if test="tag != null and tag != ''">#{tag},</if>
+            <if test="createBy != null and blogName != ''">#{createBy},</if>
+            <if test="createById != null and blogName != ''">#{createById},</if>
+            sysdate(),
+            <if test="updateBy != null and blogName != ''">#{updateBy},</if>
+            <if test="updateById != null and blogName != ''">#{updateById},</if>
+            <if test="readNum != null and blogName != ''">#{readNum},</if>
+            <if test="likeNum != null and likeNum != ''">#{likeNum},</if>
+            sysdate()
+         </trim>
+    </insert>
+
+    <update id="updateYhBlog" parameterType="YhBlog">
+        update yh_blog
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="blogName != null and blogName != ''">blog_name = #{blogName},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateById != null and updateById != ''">update_by_id = #{updateById},</if>
+            <if test="tag != null and tag != ''">tag = #{tag},</if>
+            update_time = sysdate()
+        </trim>
+        where blog_id = #{blogId}
+    </update>
+
+    <delete id="deleteYhBlogById" parameterType="Long">
+        delete from yh_blog where blog_id = #{blogId}
+    </delete>
+
+    <delete id="deleteYhBlogByIds" parameterType="String">
+        delete from yh_blog where blog_id in 
+        <foreach item="blogId" collection="array" open="(" separator="," close=")">
+            #{blogId}
+        </foreach>
+    </delete>
+    
+</mapper>

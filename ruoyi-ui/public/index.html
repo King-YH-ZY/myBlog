@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="renderer" content="webkit">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="author" content="dyh">
+  <meta name="description" content="一切都是最好的安排">
+  <meta name="keywords" content="dyh,一切都是最好的安排,会长丶临死前">
+  <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+  <title><%= webpackConfig.name %></title>
+  <!-- <script type="text/javascript" src="https://api.ly522.com/js/yinghua.js"></script> -->
+  <style>
+    html,
+    body,
+    #app {
+      height: 100%;
+      margin: 0px;
+      padding: 0px;
+    }
+
+    .chromeframe {
+      margin: 0.2em 0;
+      background: #ccc;
+      color: #000;
+      padding: 0.2em 0;
+    }
+
+    .page-loader-wrapper {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background-color: #fff;
+      z-index: 99;
+    }
+
+    .pg-loader.page-loader-wrapper {
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+
+    .loader {
+      width: 40px;
+      height: 40px;
+      margin: auto;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      z-index: 999;
+    }
+
+    .loader:before {
+      content: '';
+      width: 40px;
+      height: 5px;
+      background: #000;
+      opacity: 0.2;
+      position: absolute;
+      top: 49px;
+      left: 0;
+      border-radius: 50%;
+      -webkit-animation: shadow .5s linear infinite;
+      -moz-animation: shadow .5s linear infinite;
+      -ms-animation: shadow .5s linear infinite;
+      animation: shadow .5s linear infinite;
+    }
+
+    .loader:after {
+      content: '';
+      width: 40px;
+      height: 40px;
+      background: #000;
+      -webkit-animation: animate .5s linear infinite;
+      -moz-animation: animate .5s linear infinite;
+      -ms-animation: animate .5s linear infinite;
+      animation: animate .5s linear infinite;
+      position: absolute;
+      top: 0;
+      left: 0;
+      border-radius: 3px;
+    }
+
+    @-webkit-keyframes animate {
+      17% {
+        border-bottom-right-radius: 3px;
+      }
+
+      25% {
+        -webkit-transform: translateY(9px) rotate(22.5deg);
+      }
+
+      50% {
+        -webkit-transform: translateY(18px) scale(1, 0.9) rotate(45deg);
+        border-bottom-right-radius: 40px;
+      }
+
+      75% {
+        -webkit-transform: translateY(9px) rotate(67.5deg);
+      }
+
+      100% {
+        -webkit-transform: translateY(0) rotate(90deg);
+      }
+    }
+
+    @-moz-keyframes animate {
+      17% {
+        border-bottom-right-radius: 3px;
+      }
+
+      25% {
+        -moz-transform: translateY(9px) rotate(22.5deg);
+      }
+
+      50% {
+        -moz-transform: translateY(18px) scale(1, 0.9) rotate(45deg);
+        border-bottom-right-radius: 40px;
+      }
+
+      75% {
+        -moz-transform: translateY(9px) rotate(67.5deg);
+      }
+
+      100% {
+        -moz-transform: translateY(0) rotate(90deg);
+      }
+    }
+
+    @-ms-keyframes animate {
+      17% {
+        border-bottom-right-radius: 3px;
+      }
+
+      25% {
+        -ms-transform: translateY(9px) rotate(22.5deg);
+      }
+
+      50% {
+        -ms-transform: translateY(18px) scale(1, 0.9) rotate(45deg);
+        border-bottom-right-radius: 40px;
+      }
+
+      75% {
+        -ms-transform: translateY(9px) rotate(67.5deg);
+      }
+
+      100% {
+        -ms-transform: translateY(0) rotate(90deg);
+      }
+    }
+
+    @-webkit-keyframes shadow {
+
+      0%,
+      100% {
+        -webkit-transform: scale(1, 1);
+      }
+
+      50% {
+        -webkit-transform: scale(1.2, 1);
+      }
+    }
+
+    @-moz-keyframes shadow {
+
+      0%,
+      100% {
+        -moz-transform: scale(1, 1);
+      }
+
+      50% {
+        -moz-transform: scale(1.2, 1);
+      }
+    }
+
+    @-ms-keyframes shadow {
+
+      0%,
+      100% {
+        -ms-transform: scale(1, 1);
+      }
+
+      50% {
+        -ms-transform: scale(1.2, 1);
+      }
+    }
+
+    @keyframes shadow {
+
+      0%,
+      100% {
+        transform: scale(1, 1);
+      }
+
+      50% {
+        transform: scale(1.2, 1);
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <!-- <div id="loader-wrapper">
+		    <div id="loader"></div>
+		    <div class="loader-section section-left"></div>
+		    <div class="loader-section section-right"></div>
+		    <div class="load_title">正在加载系统资源，请耐心等待</div>
+      </div> -->
+    <div class="page-loader-wrapper">
+      <div class="loader"></div>
+    </div>
+  </div>
+</body>
+
+</html>
