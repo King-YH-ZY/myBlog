@@ -3,8 +3,9 @@ package com.ruoyi.yh.utils;
 import java.util.*;
 
 /**
- * 判断两个数组的交集   22222222
+ * 判断两个数组的交集
  */
+
 public class ArraysUtil {
 
     /**
