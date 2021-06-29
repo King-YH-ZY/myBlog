@@ -10,7 +10,7 @@ import java.util.Enumeration;
  * id自增器（雪花算法）
  *
  * @author renjie
- * @version 1.0.0
+ * @version 1.0.0    
  */
 public class SnowFlake {
     private final static long twepoch = 12888349746579L;
