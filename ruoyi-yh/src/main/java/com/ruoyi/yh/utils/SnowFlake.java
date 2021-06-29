@@ -7,7 +7,7 @@ import java.net.SocketException;
 import java.util.Enumeration;
 
 /**
- * id自增器（雪花算法）
+ * id自增器（雪花算法）1111111111111
  *
  * @author renjie
  * @version 1.0.0    
